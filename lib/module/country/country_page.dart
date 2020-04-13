@@ -20,7 +20,7 @@ class CountryPage extends StatelessWidget {
         slivers: <Widget>[
           PageWidget.AppBar(
             title: 'Countries',
-            backgroundImagePath: 'assets/images/connected-world.jpg',
+            backgroundImagePath: 'assets/images/world-map-abstract.jpg',
           ),
           SliverSafeArea(
             top: false,
