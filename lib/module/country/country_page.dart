@@ -14,12 +14,7 @@ class CountryPage extends StatefulWidget {
 }
 
 class _CountryPageState extends State<CountryPage> {
-  final india = Country.map({
-    "name": "India",
-    "population": "1.3B",
-    "gdp": "5T",
-    "head": "Narendra Modi"
-  });
+  
   final _firebaseAuthService = FirebaseAuthService();
   final _firestoreService  = FirestoreService();
 
