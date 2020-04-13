@@ -163,3 +163,11 @@ class CountryListItem extends StatelessWidget {
       ),
     );
 }
+
+class LinearIndicator extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => SliverToBoxAdapter(
+    child: LinearProgressIndicator(),
+  );
+
+}
