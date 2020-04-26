@@ -1,14 +1,14 @@
-import 'package:country/auth/auth_bloc.dart';
-import 'package:country/module/country/country_bloc.dart';
-import 'package:country/module/country/country_page.dart';
+import 'package:country/auth/auth_store.dart';
+import 'package:country/module/country/page/country_page.dart';
+import 'package:country/module/country/store/country_store.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(
   MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => CountryBloc()),
-      ChangeNotifierProvider(create: (_) => AuthBloc()),
+      Provider<AuthStore>(create: (_) => AuthStore()),
+      Provider<CountryStore>(create: (_) => CountryStore())
     ],
     child: MyApp(),
   ),

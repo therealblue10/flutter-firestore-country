@@ -1,8 +1,9 @@
-import 'package:country/auth/auth_bloc.dart';
-import 'package:country/module/country/country.dart';
-import 'package:country/module/country/country_bloc.dart';
+import 'package:country/auth/auth_store.dart';
+import 'package:country/module/country/store/country.dart';
+import 'package:country/module/country/store/country_store.dart';
 import 'package:flutter/material.dart';
-import 'package:country/module/country/country_widgets.dart' as PageWidget;
+import 'package:country/module/country/widget/country_widgets.dart' as PageWidget;
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 
@@ -20,6 +21,10 @@ class _CountryPageState extends State<CountryPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final authProvider = Provider.of<AuthStore>(context);
+    authProvider.authenticateUser();
+
     return Scaffold(
         body: CustomScrollView(
           slivers: <Widget>[
@@ -27,12 +32,13 @@ class _CountryPageState extends State<CountryPage> {
               title: 'Countries',
               backgroundImagePath: 'assets/images/world-map-abstract.jpg',
             ),
-            StreamBuilder<bool>(
-              stream:  Provider.of<AuthBloc>(context).subscribeToStream(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData && snapshot.data) {
+
+            Observer(
+              builder: (context) {
+                if (authProvider.isAuthenticated) {
                   // Logged in successfully, Let's fetch country data
                   // Add Stream builder to fetch documents.
+                  print('User authenticated');
                   return buildFirestoreCollectionStream(context);
                 }
                 else {
@@ -47,12 +53,17 @@ class _CountryPageState extends State<CountryPage> {
       );
   }
 
-  Widget buildFirestoreCollectionStream(BuildContext context) =>
-      StreamBuilder<List<Country>>(
-        stream:  Provider.of<CountryBloc>(context).subscribeToStream(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return buildCountryList(snapshot.data);
+  Widget buildFirestoreCollectionStream(BuildContext context) {
+
+    // Fetch countries
+    final countryListProvider = Provider.of<CountryStore>(context);
+    countryListProvider.fetchCountries();
+
+    return Observer(
+        builder: (context) {
+          print('Countries: ${countryListProvider.countries}');
+          if (countryListProvider.countries.length > 0) {
+            return buildCountryList(countryListProvider.countries);
           }
           else {
             // Waiting to fetch data from Firestore
@@ -60,6 +71,7 @@ class _CountryPageState extends State<CountryPage> {
           }
         },
       );
+  }
 
 
   Widget buildCountryList(List<Country> countries) {

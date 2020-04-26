@@ -1,4 +1,4 @@
-import 'package:country/module/country/country.dart';
+import 'package:country/module/country/store/country.dart';
 import 'package:flutter/material.dart';
 
 /*Creates the App Bar for Country List*/
